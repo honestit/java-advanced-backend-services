@@ -1,9 +1,11 @@
 package com.epam.kupisinski.jabs.springfoundation;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import javax.sql.DataSource;
+import java.sql.DatabaseMetaData;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -14,27 +16,25 @@ class DataSourceConditionalConfigurationTest {
   @Test
   public void shouldUseDefaultDataSourceWhenProvided() {
     contextRunner
-        .withUserConfiguration(
-            DataSourceConfiguration.class, DataSourceConditionalConfiguration.class)
+        .withConfiguration(AutoConfigurations.of(DataSourceConditionalConfiguration.class))
+        .withUserConfiguration(DataSourceConfiguration.class)
         .run(
             context -> {
-              assertThat(context.getBeansOfType(DataSource.class)).hasSize(1);
-              assertThat(context.getBean(DataSource.class))
-                  .isEqualTo(context.getBean(DataSourceConfiguration.class).dataSource());
+              DatabaseMetaData metaData =
+                  context.getBean(DataSource.class).getConnection().getMetaData();
+              assertThat(metaData.getURL()).startsWith("jdbc:h2:mem:spring-foundation-1");
             });
   }
 
   @Test
   public void shouldUseConditionalDataSourceWhenProvidedAndDefaultIsMissing() {
     contextRunner
-        .withUserConfiguration(
-            DataSourceConfiguration.class, DataSourceConditionalConfiguration.class)
+        .withConfiguration(AutoConfigurations.of(DataSourceConditionalConfiguration.class))
         .run(
             context -> {
-              assertThat(context.getBeansOfType(DataSource.class)).hasSize(1);
-              assertThat(context.getBean(DataSource.class))
-                  .isEqualTo(
-                      context.getBean(DataSourceConditionalConfiguration.class).dataSource());
+              DatabaseMetaData metaData =
+                  context.getBean(DataSource.class).getConnection().getMetaData();
+              assertThat(metaData.getURL()).startsWith("jdbc:h2:mem:spring-foundation-2");
             });
   }
 }
