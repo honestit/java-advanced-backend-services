@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.epam.kupisinski.jabs.springfoundation.task2.DefaultDataSourceAutoConfiguration
