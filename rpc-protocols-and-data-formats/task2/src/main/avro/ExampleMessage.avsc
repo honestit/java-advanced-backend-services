@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "ExampleRecord",
+  "namespace": "com.epam.kupisinski.jabs.rpcprotocols.task2",
+  "fields": [
+    {
+      "name": "message",
+      "type": "string",
+      "doc": "Some example message to consume"
+    },
+    {
+      "name": "printNum",
+      "type": "int",
+      "doc": "How many numbers message should be printed"
+    }
+  ]
+}
