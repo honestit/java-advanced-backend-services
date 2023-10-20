@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package example;
+
+option java_package = "com.epam.kupisinski.jabs.rpcprotocols.example";
+option java_multiple_files = true;
+option java_outer_classname = "ExampleProto";
+
+// Example service for tutorial purpose
+service ExampleService {
+
+  // Test rpc to revert incoming message
+  rpc Revert(RevertRequest) returns (RevertResponse) {}
+}
+
+// Request for reverting message rpc
+message RevertRequest {
+
+  // Message to be reverted
+  string message = 1;
+}
+
+// Response for reverting message rpc
+message RevertResponse {
+
+  // Reverted message
+  string reverted_message = 1;
+}
